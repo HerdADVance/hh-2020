@@ -10,6 +10,13 @@ const gameUpdates = [];
 let gameStart = 0;
 let firstServerTimestamp = 0;
 
+
+const modal = document.getElementById('modal');
+
+export function sendWaitingMessage(){
+  modal.innerHTML = "<p>Waiting on another player</p>";
+}
+
 export function initState() {
   gameStart = 0;
   firstServerTimestamp = 0;

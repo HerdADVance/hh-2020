@@ -2,7 +2,7 @@
 // https://victorzhou.com/blog/build-an-io-game-part-1/#4-client-networking
 import io from 'socket.io-client';
 import { throttle } from 'throttle-debounce';
-import { processGameUpdate } from './state';
+import { processGameUpdate, sendWaitingMessage } from './state';
 
 const Constants = require('../shared/constants');
 
@@ -20,6 +20,7 @@ export const connect = onGameOver => (
     // Register callbacks
     socket.on(Constants.MSG_TYPES.GAME_UPDATE, processGameUpdate);
     socket.on(Constants.MSG_TYPES.GAME_OVER, onGameOver);
+    socket.on(Constants.MSG_TYPES.WAITING_MESSAGE, sendWaitingMessage);
     socket.on('disconnect', () => {
       console.log('Disconnected from server.');
       document.getElementById('disconnect-modal').classList.remove('hidden');
@@ -31,7 +32,8 @@ export const connect = onGameOver => (
 );
 
 export const play = username => {
-  socket.emit(Constants.MSG_TYPES.JOIN_GAME, username);
+  socket.emit(Constants.MSG_TYPES.JOIN_LOBBY, username, socket.id);
+  socket.on(Constants.MSG_TYPES.WAITING_MESSAGE, sendWaitingMessage);
 };
 
 export const updateDirection = throttle(20, dir => {

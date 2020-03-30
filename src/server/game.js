@@ -1,15 +1,28 @@
-const Constants = require('../shared/constants');
+const { DECK } = require('../shared/deck');
 const Player = require('./player');
 const applyCollisions = require('./collisions');
 
 class Game {
+  
   constructor() {
+    this.deck = this.shuffle(DECK);
     this.sockets = {};
     this.players = {};
-    this.bullets = [];
     this.lastUpdateTime = Date.now();
     this.shouldSendUpdate = false;
     setInterval(this.update.bind(this), 1000 / 60);
+  }
+
+  shuffle(array) {
+      let counter = array.length;
+      while (counter > 0) {
+          let index = Math.floor(Math.random() * counter);
+          counter--;
+          let temp = array[counter];
+          array[counter] = array[index];
+          array[index] = temp;
+      }
+      return array;
   }
 
   addPlayer(socket, username) {

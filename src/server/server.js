@@ -5,6 +5,7 @@ const socketio = require('socket.io');
 
 const Constants = require('../shared/constants');
 const Game = require('./game');
+const Lobby = require('./lobby');
 const webpackConfig = require('../../webpack.dev.js');
 
 // Setup an Express server
@@ -33,12 +34,24 @@ io.on('connection', socket => {
   console.log('Player connected!', socket.id);
 
   socket.on(Constants.MSG_TYPES.JOIN_GAME, joinGame);
+  socket.on(Constants.MSG_TYPES.JOIN_LOBBY, joinLobby);
   socket.on(Constants.MSG_TYPES.INPUT, handleInput);
   socket.on('disconnect', onDisconnect);
 });
 
+console.log('server');
+
 // Setup the Game
+const lobby = new Lobby();
 const game = new Game();
+
+function joinLobby(username, socketId){
+  lobby.addPlayer(this, username);
+  const numPlayers = lobby.countSockets();
+  
+  if(numPlayers === 2) lobby.startGame();
+  else lobby.sendWaitingMessage(socketId);
+}
 
 function joinGame(username) {
   game.addPlayer(this, username);
