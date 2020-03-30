@@ -22,7 +22,7 @@ Promise.all([
   //downloadAssets(),
 ]).then(() => {
   
-  card1.classList.add(DECK[3].suit + DECK[3].rank);
+  //card1.classList.add(DECK[3].suit + DECK[3].rank);
   
   usernameInput.focus();
   

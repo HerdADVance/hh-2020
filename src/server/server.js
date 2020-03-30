@@ -45,17 +45,26 @@ console.log('server');
 const lobby = new Lobby();
 const game = new Game();
 
+// When user click join button
 function joinLobby(username, socketId){
-  lobby.addPlayer(this, username);
-  const numPlayers = lobby.countSockets();
   
-  if(numPlayers === 2) lobby.startGame();
-  else lobby.sendWaitingMessage(socketId);
+  lobby.addPlayer(this, username);
+  
+  // Start game if 2nd player joined or send waiting message to 1st player
+  const numPlayers = lobby.countSockets();
+  if(numPlayers === 2){
+    let players = lobby.getPlayers();
+    let sockets = lobby.getSockets();
+    game.startGame(sockets, players);
+  }
+    else lobby.sendWaitingMessage(socketId);
+
 }
 
-function joinGame(username) {
-  game.addPlayer(this, username);
+function joinGame(){
+
 }
+
 
 function handleInput(dir) {
   game.handleInput(this, dir);

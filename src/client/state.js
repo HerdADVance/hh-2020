@@ -11,10 +11,15 @@ let gameStart = 0;
 let firstServerTimestamp = 0;
 
 
-const modal = document.getElementById('modal');
-
 export function sendWaitingMessage(){
+  const modal = document.getElementById('modal');
   modal.innerHTML = "<p>Waiting on another player</p>";
+}
+
+export function sendHand(hand){
+  for(var i=1; i < hand.length + 1; i++){
+    document.getElementById('card' + i).innerHTML = "<p>" + hand[i-1].face + hand[i-1].suit + "</p>"
+  }
 }
 
 export function initState() {

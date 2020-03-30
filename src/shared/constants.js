@@ -19,5 +19,6 @@ module.exports = Object.freeze({
     INPUT: 'input',
     GAME_OVER: 'dead',
     WAITING_MESSAGE: 'waiting_message',
+    SEND_HAND: 'send_hand',
   },
 });

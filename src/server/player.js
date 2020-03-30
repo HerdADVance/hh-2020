@@ -7,6 +7,12 @@ class Player {
   constructor(id, username) {
     this.username = username;
     this.score = 0;
+    this.hand = [];
+    this.round1 = [];
+    this.round2 = [];
+    this.round3 = [];
+    this.round4 = [];
+    this.round5 = [];
   }
 
   // Returns a newly created bullet, or null.

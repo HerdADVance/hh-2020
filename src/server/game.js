@@ -1,16 +1,38 @@
 const { DECK } = require('../shared/deck');
+const Constants = require('../shared/constants');
 const Player = require('./player');
 const applyCollisions = require('./collisions');
 
 class Game {
   
   constructor() {
-    this.deck = this.shuffle(DECK);
     this.sockets = {};
     this.players = {};
+    this.round = 0;
+    this.deck = this.shuffle(DECK);
+    this.board1 = [];
+    this.board2 = [];
+    this.board3 = [];
+    this.board4 = [];
+    this.board5 = [];
+
     this.lastUpdateTime = Date.now();
     this.shouldSendUpdate = false;
-    setInterval(this.update.bind(this), 1000 / 60);
+    //setInterval(this.update.bind(this), 1000 / 60);
+  }
+
+  startGame(sockets, players){
+    this.sockets = sockets;
+    this.players = players;
+    this.round = 1;
+    this.dealHands(this.deck);
+    this.board1 = this.dealBoard(this.deck)
+    this.board2 = this.dealBoard(this.deck)
+    this.board3 = this.dealBoard(this.deck)
+    this.board4 = this.dealBoard(this.deck)
+    this.board5 = this.dealBoard(this.deck)
+    
+    this.emitHands();
   }
 
   shuffle(array) {
@@ -23,6 +45,39 @@ class Game {
           array[index] = temp;
       }
       return array;
+  }
+
+  dealHands(deck){
+    Object.keys(this.players).forEach(player => {
+      let hand = [];
+      let count = 0;
+      while(count < 10){
+        let card = deck.shift();
+        hand.push(card);
+        count ++;
+      }
+      this.players[player].hand = hand;
+    })
+  }
+
+  dealBoard(deck){
+    let board = [];
+    let count = 0;
+    while(count < 5){
+      let card = deck.shift();
+      board.push(card);
+      count ++;
+    }
+    return board;
+  }
+
+  emitHands(){
+    Object.keys(this.sockets).forEach(playerID => {
+      const socket = this.sockets[playerID];
+      const player = this.players[playerID];
+
+      socket.emit(Constants.MSG_TYPES.SEND_HAND, player.hand);
+    });
   }
 
   addPlayer(socket, username) {

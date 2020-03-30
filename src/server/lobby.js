@@ -22,20 +22,16 @@ class Lobby {
     return count;
   }
 
-  logPlayers(){
-    console.log(this.players);
+  getPlayers(){
+    return this.players;
   }
 
-  logSockets(){
-    console.log(this.sockets);
+  getSockets(){
+    return this.sockets;
   }
 
   sendWaitingMessage(socketId){
     this.sockets[socketId].emit(Constants.MSG_TYPES.WAITING_MESSAGE);
-  }
-
-  startGame(){
-    Game.
   }
 
 }

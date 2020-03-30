@@ -9,6 +9,7 @@ body{
 .card{
   background-repeat: no-repeat;
   background-size: 100% 100%;
+  float: left;
   height: 160px;
   width: 120px;
 }
