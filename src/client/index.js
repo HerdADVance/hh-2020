@@ -14,6 +14,7 @@ import './css/main.css';
 const joinContainer = document.getElementById('join-container');
 const joinGame = document.getElementById('join-game');
 const usernameInput = document.getElementById('username-input');
+const modal = document.getElementById('modal');
 
 const card1 = document.getElementById('card1');
 
