@@ -18,6 +18,12 @@ const modal = document.getElementById('modal');
 
 const card1 = document.getElementById('card1');
 
+document.addEventListener('click', function (event) {
+  if (!event.target.matches('.card')) return;
+  event.preventDefault();
+  event.target.classList.toggle('selected');
+}, false);
+
 Promise.all([
   //connect(onGameOver),
   //downloadAssets(),
