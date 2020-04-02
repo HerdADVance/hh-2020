@@ -11,14 +11,21 @@ let gameStart = 0;
 let firstServerTimestamp = 0;
 
 const modal = document.getElementById('modal');
+const players = document.getElementsByClassName('player');
+const opponentUsername = document.getElementById('opponent-username');
 
 
 export function sendWaitingMessage(){
   modal.innerHTML = "<p>Waiting on another player</p>";
 }
 
-export function sendHand(hand){
+export function sendHand(hand, username){
+  
   modal.classList.add('hidden');
+  players[0].classList.remove('hidden');
+  players[1].classList.remove('hidden');
+  opponentUsername.textContent = username;
+
   for(var i=1; i < hand.length + 1; i++){
     document.getElementById('card' + i).classList.add(hand[i-1].suit + hand[i-1].face)
   }

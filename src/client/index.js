@@ -14,14 +14,14 @@ import './css/main.css';
 const joinContainer = document.getElementById('join-container');
 const joinGame = document.getElementById('join-game');
 const usernameInput = document.getElementById('username-input');
-const modal = document.getElementById('modal');
+const myUsername = document.getElementById('my-username');
 
-const card1 = document.getElementById('card1');
+const playHand = document.getElementById('play-hand');
 
 document.addEventListener('click', function (event) {
-  if (!event.target.matches('.card')) return;
-  event.preventDefault();
-  event.target.classList.toggle('selected');
+    if (!event.target.matches('.card')) return;
+    event.preventDefault();
+    event.target.classList.toggle('selected');
 }, false);
 
 Promise.all([
@@ -36,6 +36,7 @@ Promise.all([
   joinGame.onclick = () => {
 
     play(usernameInput.value);
+    myUsername.textContent = usernameInput.value;
     joinContainer.classList.add('hidden');
 
     initState();
@@ -44,6 +45,12 @@ Promise.all([
     //setLeaderboardHidden(false);
 
   };
+
+  playHand.onclick = () => {
+    let cards = document.getElementsByClassName('card');
+    console.log(cards);
+  }
+
 }).catch(console.error);
 
 

@@ -8,7 +8,6 @@ body{
  	background: mediumseagreen;
 }
 .opponent{
-	display: flex;
 	justify-content: center;
 	position: absolute;
 	top: 20px;

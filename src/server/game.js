@@ -5,80 +5,102 @@ const applyCollisions = require('./collisions');
 
 class Game {
   
-  constructor() {
-    this.sockets = {};
-    this.players = {};
-    this.round = 0;
-    this.deck = this.shuffle(DECK);
-    this.board1 = [];
-    this.board2 = [];
-    this.board3 = [];
-    this.board4 = [];
-    this.board5 = [];
+    constructor() {
+        this.sockets = {};
+        this.players = {};
+        this.round = 0;
+        this.deck = this.shuffle(DECK);
+        this.board1 = [];
+        this.board2 = [];
+        this.board3 = [];
+        this.board4 = [];
+        this.board5 = [];
 
-    this.lastUpdateTime = Date.now();
-    this.shouldSendUpdate = false;
-    //setInterval(this.update.bind(this), 1000 / 60);
-  }
-
-  startGame(sockets, players){
-    this.sockets = sockets;
-    this.players = players;
-    this.round = 1;
-    this.dealHands(this.deck);
-    this.board1 = this.dealBoard(this.deck)
-    this.board2 = this.dealBoard(this.deck)
-    this.board3 = this.dealBoard(this.deck)
-    this.board4 = this.dealBoard(this.deck)
-    this.board5 = this.dealBoard(this.deck)
-    
-    this.emitHands();
-  }
-
-  shuffle(array) {
-      let counter = array.length;
-      while (counter > 0) {
-          let index = Math.floor(Math.random() * counter);
-          counter--;
-          let temp = array[counter];
-          array[counter] = array[index];
-          array[index] = temp;
-      }
-      return array;
-  }
-
-  dealHands(deck){
-    Object.keys(this.players).forEach(player => {
-      let hand = [];
-      let count = 0;
-      while(count < 10){
-        let card = deck.shift();
-        hand.push(card);
-        count ++;
-      }
-      this.players[player].hand = hand;
-    })
-  }
-
-  dealBoard(deck){
-    let board = [];
-    let count = 0;
-    while(count < 5){
-      let card = deck.shift();
-      board.push(card);
-      count ++;
+        this.lastUpdateTime = Date.now();
+        this.shouldSendUpdate = false;
+        //setInterval(this.update.bind(this), 1000 / 60);
     }
-    return board;
-  }
 
-  emitHands(){
-    Object.keys(this.sockets).forEach(playerID => {
-      const socket = this.sockets[playerID];
-      const player = this.players[playerID];
+    startGame(sockets, players){
+        this.sockets = sockets;
+        this.players = players;
+        this.round = 1;
+        this.dealHands(this.deck);
+        this.board1 = this.dealBoard(this.deck)
+        this.board2 = this.dealBoard(this.deck)
+        this.board3 = this.dealBoard(this.deck)
+        this.board4 = this.dealBoard(this.deck)
+        this.board5 = this.dealBoard(this.deck)
 
-      socket.emit(Constants.MSG_TYPES.SEND_HAND, player.hand);
-    });
-  }
+        this.emitHands();
+        //this.emitOpponentUsername();
+    }
+
+    shuffle(array) {
+        let counter = array.length;
+        while (counter > 0) {
+            let index = Math.floor(Math.random() * counter);
+            counter--;
+            let temp = array[counter];
+            array[counter] = array[index];
+            array[index] = temp;
+        }
+        return array;
+    }
+
+    dealHands(deck){
+        Object.keys(this.players).forEach(player => {
+            let hand = [];
+            let count = 0;
+            while(count < 10){
+                let card = deck.shift();
+                hand.push(card);
+                count ++;
+            }
+            this.players[player].hand = hand;
+        })
+    }
+
+    dealBoard(deck){
+        let board = [];
+        let count = 0;
+        while(count < 5){
+            let card = deck.shift();
+            board.push(card);
+            count ++;
+        }
+        return board;
+    }
+
+    emitHands(){
+
+        let opponentUsername = '';
+
+        Object.keys(this.sockets).forEach(sid => {
+            
+            Object.keys(this.players).forEach(pid => {
+                if(sid != pid) opponentUsername = this.players[pid].username 
+            });
+            
+            const socket = this.sockets[sid];
+            const player = this.players[sid];
+
+            socket.emit(Constants.MSG_TYPES.SEND_HAND, player.hand, opponentUsername);
+        });
+    }
+
+  // emitOpponentUsername(){
+  //   Object.keys(this.sockets).forEach(playerID => {
+
+  //     const socket = this.sockets[playerID];  
+      
+  //     Object.keys(this.players).forEach(playerID => {
+  //       if(playerID != this.players[playerID]) 
+  //     })
+
+  //     socket.emit(Constants.MSG_TYPES.SEND_HAND, player.hand);
+  //   });
+  // }
 
   addPlayer(socket, username) {
     this.sockets[socket.id] = socket;
