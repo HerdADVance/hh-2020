@@ -13,21 +13,35 @@ let firstServerTimestamp = 0;
 const modal = document.getElementById('modal');
 const players = document.getElementsByClassName('player');
 const opponentUsername = document.getElementById('opponent-username');
-
+const board = document.getElementById('board');
 
 export function sendWaitingMessage(){
   modal.innerHTML = "<p>Waiting on another player</p>";
 }
 
-export function sendHand(hand, username){
+export function sendHandWaitingMessage(){
+  modal.classList.remove('hidden');
+  modal.innerHTML = "<p>Waiting on opponent to play</p>";
+}
+
+export function sendHand(hand, username, boardCards){
   
   modal.classList.add('hidden');
   players[0].classList.remove('hidden');
   players[1].classList.remove('hidden');
+  board.classList.remove('hidden');
   opponentUsername.textContent = username;
 
   for(var i=1; i < hand.length + 1; i++){
-    document.getElementById('card' + i).classList.add(hand[i-1].suit + hand[i-1].face)
+    let suitFace = hand[i-1].suit + hand[i-1].face;
+    let faceSuit = hand[i-1].face + hand[i-1].suit;
+
+    document.getElementById('card' + i).classList.add(suitFace)
+    document.getElementById('card' + i).setAttribute("data-card", faceSuit);
+  }
+
+  for(var i=1; i < 6; i++){
+    document.getElementById('board' + i).classList.add(boardCards[i-1].suit + boardCards[i-1].face)
   }
 }
 

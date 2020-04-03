@@ -32,8 +32,9 @@ class Game {
         this.board4 = this.dealBoard(this.deck)
         this.board5 = this.dealBoard(this.deck)
 
+        this.findOpponentId();
         this.emitHands();
-        //this.emitOpponentUsername();
+        console.log(this.players);
     }
 
     shuffle(array) {
@@ -72,35 +73,60 @@ class Game {
         return board;
     }
 
-    emitHands(){
-
-        let opponentUsername = '';
-
+    findOpponentId(){
         Object.keys(this.sockets).forEach(sid => {
             
             Object.keys(this.players).forEach(pid => {
-                if(sid != pid) opponentUsername = this.players[pid].username 
+                if(sid != pid) this.players[sid].opponentId = pid
             });
-            
-            const socket = this.sockets[sid];
-            const player = this.players[sid];
 
-            socket.emit(Constants.MSG_TYPES.SEND_HAND, player.hand, opponentUsername);
         });
     }
 
-  // emitOpponentUsername(){
-  //   Object.keys(this.sockets).forEach(playerID => {
+    emitHands(){
 
-  //     const socket = this.sockets[playerID];  
-      
-  //     Object.keys(this.players).forEach(playerID => {
-  //       if(playerID != this.players[playerID]) 
-  //     })
+        let opponentUsername = '';
+        console.log(this.players);
 
-  //     socket.emit(Constants.MSG_TYPES.SEND_HAND, player.hand);
-  //   });
-  // }
+        Object.keys(this.sockets).forEach(sid => {
+            
+            const socket = this.sockets[sid];
+            const player = this.players[sid];
+            const opponentId = this.players[sid].opponentId;
+            opponentUsername = this.players[opponentId].username
+
+            socket.emit(Constants.MSG_TYPES.SEND_HAND, player.hand, opponentUsername, this.board1);
+        });
+    }
+
+    updateHand(hand, sid){
+        let round = 'round' + this.round;
+        this.players[sid][round] = hand;
+    }
+
+    hasOpponentPlayed(sid){
+        let round = 'round' + this.round;
+        let opponentId = this.players[sid].opponentId;
+        let opponentHand = this.players[opponentId][round];
+
+        if(opponentHand[0]) return true
+            else return false
+    }
+
+    sendWaitingMessage(sid){
+        const socket = this.sockets[sid];
+        socket.emit(Constants.MSG_TYPES.HAND_WAITING_MESSAGE);
+    }
+
+    compareHands(){
+        let hands = []
+        let round = 'round' + this.round;
+        Object.keys(this.players).forEach(pid => {
+            hands.push(this.players[pid][round])
+        });
+        console.log(hands);
+    }
+
 
   addPlayer(socket, username) {
     this.sockets[socket.id] = socket;

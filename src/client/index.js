@@ -1,6 +1,6 @@
 // Learn more about this file at:
 // https://victorzhou.com/blog/build-an-io-game-part-1/#3-client-entrypoints
-import { connect, play } from './networking';
+import { connect, play, playHand } from './networking';
 // import { startRendering, stopRendering } from './render';
 // import { startCapturingInput, stopCapturingInput } from './input';
 import { downloadAssets } from './assets';
@@ -16,7 +16,7 @@ const joinGame = document.getElementById('join-game');
 const usernameInput = document.getElementById('username-input');
 const myUsername = document.getElementById('my-username');
 
-const playHand = document.getElementById('play-hand');
+const playHandButton = document.getElementById('play-hand');
 
 document.addEventListener('click', function (event) {
     if (!event.target.matches('.card')) return;
@@ -46,9 +46,16 @@ Promise.all([
 
   };
 
-  playHand.onclick = () => {
-    let cards = document.getElementsByClassName('card');
-    console.log(cards);
+  playHandButton.onclick = () => {
+    let selected = document.getElementsByClassName('selected');
+    if(selected.length !== 2) console.log("error");
+
+    let playedHand = [
+        selected[0].getAttribute("data-card"),
+        selected[1].getAttribute("data-card")
+    ]
+
+    playHand(playedHand);
   }
 
 }).catch(console.error);

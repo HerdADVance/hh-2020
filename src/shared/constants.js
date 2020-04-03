@@ -20,5 +20,7 @@ module.exports = Object.freeze({
     GAME_OVER: 'dead',
     WAITING_MESSAGE: 'waiting_message',
     SEND_HAND: 'send_hand',
+    PLAY_HAND: 'play_hand',
+    HAND_WAITING_MESSAGE: 'hand_waiting_message'
   },
 });

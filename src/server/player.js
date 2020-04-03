@@ -6,6 +6,7 @@ class Player {
   
   constructor(id, username) {
     this.username = username;
+    this.opponentId = '';
     this.score = 0;
     this.hand = [];
     this.round1 = [];

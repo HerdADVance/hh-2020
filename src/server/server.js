@@ -36,6 +36,7 @@ io.on('connection', socket => {
   socket.on(Constants.MSG_TYPES.JOIN_GAME, joinGame);
   socket.on(Constants.MSG_TYPES.JOIN_LOBBY, joinLobby);
   socket.on(Constants.MSG_TYPES.INPUT, handleInput);
+  socket.on(Constants.MSG_TYPES.PLAY_HAND, playHand);
   socket.on('disconnect', onDisconnect);
 });
 
@@ -45,7 +46,7 @@ console.log('server');
 const lobby = new Lobby();
 const game = new Game();
 
-// When user click join button
+// When user clicks join button
 function joinLobby(username, socketId){
   
   lobby.addPlayer(this, username);
@@ -61,10 +62,22 @@ function joinLobby(username, socketId){
 
 }
 
+// Hand that user has played. Will either compare hands or tell user we're waiting on opponent
+function playHand(hand, socketId){
+
+  // do more validation here later
+  game.updateHand(hand, socketId)
+
+  let opponentHasPlayed = game.hasOpponentPlayed(socketId);
+
+  if(opponentHasPlayed) game.compareHands();
+    else game.sendWaitingMessage(socketId);
+}
+
+
 function joinGame(){
 
 }
-
 
 function handleInput(dir) {
   game.handleInput(this, dir);

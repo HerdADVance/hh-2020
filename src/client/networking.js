@@ -2,7 +2,7 @@
 // https://victorzhou.com/blog/build-an-io-game-part-1/#4-client-networking
 import io from 'socket.io-client';
 import { throttle } from 'throttle-debounce';
-import { processGameUpdate, sendWaitingMessage, sendHand } from './state';
+import { processGameUpdate, sendWaitingMessage, sendHand, sendHandWaitingMessage } from './state';
 
 const Constants = require('../shared/constants');
 
@@ -36,7 +36,14 @@ export const play = username => {
   socket.emit(Constants.MSG_TYPES.JOIN_LOBBY, username, socket.id);
   socket.on(Constants.MSG_TYPES.WAITING_MESSAGE, sendWaitingMessage);
   socket.on(Constants.MSG_TYPES.SEND_HAND, sendHand);
+  socket.on(Constants.MSG_TYPES.HAND_WAITING_MESSAGE, sendHandWaitingMessage);
 };
+
+export const playHand = hand => {
+  console.log(hand);
+  
+  socket.emit(Constants.MSG_TYPES.PLAY_HAND, hand, socket.id);
+}
 
 export const updateDirection = throttle(20, dir => {
   socket.emit(Constants.MSG_TYPES.INPUT, dir);

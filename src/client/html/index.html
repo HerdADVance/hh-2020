@@ -6,9 +6,11 @@
 <body>
 
     <div class="player opponent hidden">
-        <div class="username" id="opponent-username"></div>
-        <div class="score" id="opponent-score">0</div>
-        <div class="cards">
+        <div class="player-info" id="opponent-player-info">
+            <div class="username" id="opponent-username"></div>
+            <div class="score" id="opponent-score">0</div>
+        </div>
+        <div class="cards opponent-cards">
             <div class="card"></div>
             <div class="card"></div>
             <div class="card"></div>
@@ -23,21 +25,31 @@
     </div>
 
     <div class="player me hidden">
-        <div class="username" id="my-username"></div>
-        <div class="score" id="my-score">0</div>
+        <div class="player-info" id="my-player-info">
+            <div class="username" id="my-username"></div>
+            <div class="score" id="my-score">0</div>
+        </div>
         <div class="cards my-cards">
-            <div class="card my-card" id="card1"></div>
-            <div class="card my-card" id="card2"></div>
-            <div class="card my-card" id="card3"></div>
-            <div class="card my-card" id="card4"></div>
-            <div class="card my-card" id="card5"></div>
-            <div class="card my-card" id="card6"></div>
-            <div class="card my-card" id="card7"></div>
-            <div class="card my-card" id="card8"></div>
-            <div class="card my-card" id="card9"></div>
-            <div class="card my-card" id="card10"></div>
+            <div class="card my-card" id="card1" data-card=""></div>
+            <div class="card my-card" id="card2" data-card=""></div>
+            <div class="card my-card" id="card3" data-card=""></div>
+            <div class="card my-card" id="card4" data-card=""></div>
+            <div class="card my-card" id="card5" data-card=""></div>
+            <div class="card my-card" id="card6" data-card=""></div>
+            <div class="card my-card" id="card7" data-card=""></div>
+            <div class="card my-card" id="card8" data-card=""></div>
+            <div class="card my-card" id="card9" data-card=""></div>
+            <div class="card my-card" id="card10" data-card=""></div>
             <button id="play-hand">Play Hand</button>
         </div>
+    </div>
+
+    <div class="board hidden" id="board">
+        <div class="card" id="board1"></div>
+        <div class="card" id="board2"></div>
+        <div class="card" id="board3"></div>
+        <div class="card" id="board4"></div>
+        <div class="card" id="board5"></div>
     </div>
 
     <div id="join-container">
