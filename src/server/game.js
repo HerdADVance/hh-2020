@@ -3,6 +3,8 @@ const Constants = require('../shared/constants');
 const Player = require('./player');
 const applyCollisions = require('./collisions');
 
+const findWinnerId = require('./findWinner');
+
 class Game {
   
     constructor() {
@@ -86,7 +88,7 @@ class Game {
     emitHands(){
 
         let opponentUsername = '';
-        console.log(this.players);
+        //console.log(this.players);
 
         Object.keys(this.sockets).forEach(sid => {
             
@@ -119,12 +121,29 @@ class Game {
     }
 
     compareHands(){
+        let boardCards = []
         let hands = []
         let round = 'round' + this.round;
+        let board = 'board' + this.round;
+        board = this[board]
+
         Object.keys(this.players).forEach(pid => {
             hands.push(this.players[pid][round])
         });
-        console.log(hands);
+
+        board.forEach(card => {
+            boardCards.push(card.face + card.suit);
+        });
+
+        let winner = findWinnerId(boardCards, hands);
+
+        if(winner !== "TIE"){
+            Object.keys(this.players).forEach(pid => {
+                let cards = this.players[pid][round]
+                if(winner == cards) console.log("Winner: " + this.players[pid].username)
+            });
+        } else console.log("tie")
+        
     }
 
 

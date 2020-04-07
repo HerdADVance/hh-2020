@@ -40,8 +40,6 @@ io.on('connection', socket => {
   socket.on('disconnect', onDisconnect);
 });
 
-console.log('server');
-
 // Setup the Game
 const lobby = new Lobby();
 const game = new Game();
